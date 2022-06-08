@@ -60,6 +60,105 @@ func ProjectMaxExpectedEvents() []time.Time {
 	return res
 }
 
+func ProjectDailies() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:     rrule.DAILY,
+		Dtstart:  dtstart,
+		Interval: 1,
+	})
+
+	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 10000), true)
+}
+
+func ProjectMultipleRulesDaily() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:     rrule.DAILY,
+		Dtstart:  dtstart,
+		Interval: 1,
+	})
+
+	iterations := 10000
+
+	res := make([]time.Time, 0)
+
+	for i := 0; i < iterations; i++ {
+		res = append(res, sampleRule.Between(dtstart, dtstart, true)...)
+	}
+
+	return res
+}
+
+func ProjectMultipleRulesDailyOld() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:     rrule.DAILY,
+		Dtstart:  dtstart.AddDate(-2, 0, 0),
+		Interval: 1,
+	})
+
+	iterations := 10000
+
+	res := make([]time.Time, 0)
+
+	for i := 0; i < iterations; i++ {
+		res = append(res, sampleRule.Between(dtstart, dtstart, true)...)
+	}
+
+	return res
+}
+
+func ProjectWeekly() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:      rrule.WEEKLY,
+		Dtstart:   dtstart,
+		Interval:  1,
+		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
+	})
+
+	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 3333*7), true)
+}
+func ProjectMultipleRulesWeekly() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:      rrule.WEEKLY,
+		Dtstart:   dtstart,
+		Interval:  1,
+		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
+	})
+
+	iterations := 10000 / 3
+
+	res := make([]time.Time, 0)
+
+	for i := 0; i < iterations; i++ {
+		res = append(res, sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 6), true)...)
+	}
+
+	return res
+}
+func ProjectMultipleRulesWeeklyOld() []time.Time {
+	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:      rrule.WEEKLY,
+		Dtstart:   dtstart.AddDate(-2, 0, 0),
+		Interval:  1,
+		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
+	})
+
+	iterations := 10000 / 3
+
+	res := make([]time.Time, 0)
+
+	for i := 0; i < iterations; i++ {
+		res = append(res, sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 6), true)...)
+	}
+
+	return res
+}
+
 func GenerateEvents() []time.Time {
 	// 3 days a week
 	r1, _ := rrule.NewRRule(rrule.ROption{
