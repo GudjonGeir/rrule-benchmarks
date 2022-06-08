@@ -10,7 +10,9 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
     "benchmark": "^2.1.4",
+    "eslint": "^8.17.0",
     "rrule": "^2.6.9"
   }
 }

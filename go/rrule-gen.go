@@ -2,10 +2,63 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/teambition/rrule-go"
 )
+
+type interval int
+
+const (
+	MINUTE interval = iota
+	HOUR
+	DAY
+	WEEKLY
+)
+
+func GetUnixTimeValueForInterval(reqInterval interval) int64 {
+	switch reqInterval {
+	case MINUTE:
+		return 60
+	case HOUR:
+		return 60 * GetUnixTimeValueForInterval(MINUTE)
+	case DAY:
+		return 24 * GetUnixTimeValueForInterval(HOUR)
+	case WEEKLY:
+		return 7 * GetUnixTimeValueForInterval(DAY)
+	default:
+		return 0
+	}
+}
+
+func GenerateRandomDatesWithInterval(intervalType interval, amount int64) (time.Time, time.Time) {
+	initialTime := rand.Int63n(time.Now().Unix()-94608000) + 94608000
+	min := time.Unix(initialTime, 0)
+	max := time.Unix(initialTime+GetUnixTimeValueForInterval(intervalType)*amount, 0)
+	return min, max
+}
+
+func ProjectMaxExpectedEvents() []time.Time {
+
+	sampleRule, _ := rrule.NewRRule(rrule.ROption{
+		Freq:      rrule.WEEKLY,
+		Dtstart:   time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC),
+		Interval:  1,
+		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
+	})
+
+	iterations := 1000000
+
+	res := make([]time.Time, 0)
+
+	for i := 0; i < iterations; i++ {
+		min, max := GenerateRandomDatesWithInterval(DAY, 1)
+		res = append(res, sampleRule.Between(min, max, true)...)
+	}
+
+	return res
+}
 
 func GenerateEvents() []time.Time {
 	// 3 days a week

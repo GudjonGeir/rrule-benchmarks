@@ -1,6 +1,6 @@
 import smu from "benchmark";
 const { Suite } = smu;
-import generateEvents from "./rrule-gen.js";
+import {generateEvents,  projectMaxExpectedEvents } from "./rrule-gen.js";
 
 const suite = new Suite();
 
@@ -12,6 +12,7 @@ suite
     }
     // { minSamples: 1000 }
   )
+.add("projections", () => {projectMaxExpectedEvents()})
   .on("cycle", function (event) {
     console.log(String(event.target));
   })
