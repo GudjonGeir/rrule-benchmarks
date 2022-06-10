@@ -60,6 +60,8 @@ func ProjectMaxExpectedEvents() []time.Time {
 	return res
 }
 
+const numberOfEvents = 100000
+
 func ProjectDailies() []time.Time {
 	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
 	sampleRule, _ := rrule.NewRRule(rrule.ROption{
@@ -68,7 +70,7 @@ func ProjectDailies() []time.Time {
 		Interval: 1,
 	})
 
-	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 10000), true)
+	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, numberOfEvents), true)
 }
 
 func ProjectMultipleRulesDaily() []time.Time {
@@ -79,11 +81,9 @@ func ProjectMultipleRulesDaily() []time.Time {
 		Interval: 1,
 	})
 
-	iterations := 10000
-
 	res := make([]time.Time, 0)
 
-	for i := 0; i < iterations; i++ {
+	for i := 0; i < numberOfEvents; i++ {
 		res = append(res, sampleRule.Between(dtstart, dtstart, true)...)
 	}
 
@@ -98,11 +98,9 @@ func ProjectMultipleRulesDailyOld() []time.Time {
 		Interval: 1,
 	})
 
-	iterations := 10000
-
 	res := make([]time.Time, 0)
 
-	for i := 0; i < iterations; i++ {
+	for i := 0; i < numberOfEvents; i++ {
 		res = append(res, sampleRule.Between(dtstart, dtstart, true)...)
 	}
 
@@ -118,7 +116,7 @@ func ProjectWeekly() []time.Time {
 		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
 	})
 
-	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, 3333*7), true)
+	return sampleRule.Between(dtstart, dtstart.AddDate(0, 0, numberOfEvents/3*7), true)
 }
 func ProjectMultipleRulesWeekly() []time.Time {
 	dtstart := time.Date(2021, 2, 1, 10, 30, 0, 0, time.UTC)
@@ -129,7 +127,7 @@ func ProjectMultipleRulesWeekly() []time.Time {
 		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
 	})
 
-	iterations := 10000 / 3
+	iterations := numberOfEvents / 3
 
 	res := make([]time.Time, 0)
 
@@ -148,7 +146,7 @@ func ProjectMultipleRulesWeeklyOld() []time.Time {
 		Byweekday: []rrule.Weekday{rrule.MO, rrule.WE, rrule.FR},
 	})
 
-	iterations := 10000 / 3
+	iterations := numberOfEvents / 3
 
 	res := make([]time.Time, 0)
 
@@ -201,5 +199,10 @@ func GenerateEvents() []time.Time {
 }
 
 func main() {
-	fmt.Println(len(GenerateEvents()))
+	fmt.Println(len(ProjectDailies()))
+	fmt.Println(len(ProjectMultipleRulesDaily()))
+	fmt.Println(len(ProjectMultipleRulesDailyOld()))
+	fmt.Println(len(ProjectWeekly()))
+	fmt.Println(len(ProjectMultipleRulesWeekly()))
+	fmt.Println(len(ProjectMultipleRulesWeeklyOld()))
 }

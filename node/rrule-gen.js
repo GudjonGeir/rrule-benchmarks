@@ -71,6 +71,8 @@ export function projectMaxExpectedEvents() {
   return res;
 }
 
+const numberOfEvents = 10000;
+
 export function projectDailies() {
   const dtstart = new Date(Date.UTC(2021, 1, 1, 10, 30));
   const rule = new RRule(
@@ -82,7 +84,7 @@ export function projectDailies() {
   );
 
   const dtend = new Date(dtstart);
-  dtend.setDate(dtend.getDate() + 1000);
+  dtend.setDate(dtend.getDate() + numberOfEvents);
 
   return rule.between(dtstart, dtend, true);
 }
@@ -96,7 +98,7 @@ export function projectMultipleRulesDaily() {
     },
     true
   );
-  const iterations = 1000;
+  const iterations = numberOfEvents;
   let res = [];
 
   for (let i = 0; i < iterations; i++) {
@@ -115,7 +117,7 @@ export function projectMultipleRulesDailyOld() {
     true
   );
 
-  const iterations = 1000;
+  const iterations = numberOfEvents;
   let res = [];
 
   for (let i = 0; i < iterations; i++) {
@@ -137,7 +139,7 @@ export function projectWeekly() {
   );
 
   const dtend = new Date(dtstart);
-  dtend.setDate(dtend.getDate() + 333 * 7);
+  dtend.setDate(dtend.getDate() + (numberOfEvents / 3) * 7);
 
   return rule.between(dtstart, dtend, true);
 }
@@ -153,7 +155,7 @@ export function projectMultipleRulesWeekly() {
     },
     true
   );
-  const iterations = 1000 / 3;
+  const iterations = numberOfEvents / 3;
 
   const dtend = new Date(dtstart);
   dtend.setDate(dtend.getDate() + 6);
@@ -164,6 +166,34 @@ export function projectMultipleRulesWeekly() {
     res = [...res, ...rule.between(dtstart, dtend, true)];
   }
   return res;
+}
+
+export function projectMultipleRulesWeeklyAsync() {
+  console.log("A");
+  return new Promise((resolve, reject) => {
+    const dtstart = new Date(Date.UTC(2021, 1, 1, 10, 30));
+    const rule = new RRule(
+      {
+        freq: RRule.WEEKLY,
+        dtstart: dtstart,
+        interval: 1,
+        byweekday: [RRule.MO, RRule.WE, RRule.FR],
+      },
+      true
+    );
+    const iterations = numberOfEvents / 3;
+
+    const dtend = new Date(dtstart);
+    dtend.setDate(dtend.getDate() + 6);
+
+    let res = [];
+
+    for (let i = 0; i < iterations; i++) {
+      res = [...res, ...rule.between(dtstart, dtend, true)];
+    }
+    console.log("B");
+    return resolve(res);
+  });
 }
 
 export function projectMultipleRulesWeeklyOld() {
@@ -177,7 +207,7 @@ export function projectMultipleRulesWeeklyOld() {
     },
     true
   );
-  const iterations = 1000 / 3;
+  const iterations = numberOfEvents / 3;
 
   const dtend = new Date(dtstart);
   dtend.setDate(dtend.getDate() + 6);
@@ -189,3 +219,19 @@ export function projectMultipleRulesWeeklyOld() {
   }
   return res;
 }
+
+// console.log("projectDailies: ", projectDailies().length);
+// console.log("projectMultipleRulesDaily: ", projectMultipleRulesDaily().length);
+// console.log(
+//   "projectMultipleRulesDailyOld: ",
+//   projectMultipleRulesDailyOld().length
+// );
+// console.log("projectWeekly: ", projectWeekly().length);
+// console.log(
+//   "projectMultipleRulesWeekly: ",
+//   projectMultipleRulesWeekly().length
+// );
+// console.log(
+//   "projectMultipleRulesWeeklyOld: ",
+//   projectMultipleRulesWeeklyOld().length
+// );
