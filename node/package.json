@@ -13,6 +13,7 @@
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "benchmark": "^2.1.4",
     "eslint": "^8.17.0",
+    "express": "^4.18.1",
     "rrule": "^2.6.9"
   }
 }
