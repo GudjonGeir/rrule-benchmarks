@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
+	"net/http"
 	"time"
 
 	"github.com/teambition/rrule-go"
@@ -187,22 +190,37 @@ func GenerateEvents() []time.Time {
 
 	res := r1.Between(
 		time.Date(2021, 8, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2022, 8, 1, 0, 0, 0, 0, time.UTC), true)
+		time.Date(2021, 8, 7, 23, 59, 59, 0, time.UTC), true)
 	res = append(res, r2.Between(
 		time.Date(2021, 8, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2022, 8, 1, 0, 0, 0, 0, time.UTC), true)...)
+		time.Date(2021, 8, 7, 23, 59, 59, 0, time.UTC), true)...)
 	res = append(res, set.Between(
 		time.Date(2021, 8, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2022, 8, 1, 0, 0, 0, 0, time.UTC), true)...)
+		time.Date(2021, 8, 7, 23, 59, 59, 0, time.UTC), true)...)
 
 	return res
 }
 
+// func main() {
+// 	fmt.Println(len(ProjectDailies()))
+// 	fmt.Println(len(ProjectMultipleRulesDaily()))
+// 	fmt.Println(len(ProjectMultipleRulesDailyOld()))
+// 	fmt.Println(len(ProjectWeekly()))
+// 	fmt.Println(len(ProjectMultipleRulesWeekly()))
+// 	fmt.Println(len(ProjectMultipleRulesWeeklyOld()))
+// }
+
+func generateWeek(w http.ResponseWriter, r *http.Request) {
+	dates := GenerateEvents()
+	// fmt.Printf("%v", dates)
+	json.NewEncoder(w).Encode(dates)
+}
+
+func handleRequests() {
+	http.HandleFunc("/", generateWeek)
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+
 func main() {
-	fmt.Println(len(ProjectDailies()))
-	fmt.Println(len(ProjectMultipleRulesDaily()))
-	fmt.Println(len(ProjectMultipleRulesDailyOld()))
-	fmt.Println(len(ProjectWeekly()))
-	fmt.Println(len(ProjectMultipleRulesWeekly()))
-	fmt.Println(len(ProjectMultipleRulesWeeklyOld()))
+	handleRequests()
 }
