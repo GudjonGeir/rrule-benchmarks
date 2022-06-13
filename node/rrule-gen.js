@@ -5,7 +5,7 @@ const { RRuleSet, RRule } = smu;
 const rule1 = new RRule(
   {
     freq: RRule.WEEKLY,
-    dtstart: new Date(Date.UTC(2021, 1, 1, 10, 30)),
+    dtstart: new Date(Date.UTC(2021, 2, 1, 10, 30)),
     interval: 1,
     byweekday: [RRule.MO, RRule.WE, RRule.FR],
   },
@@ -15,7 +15,7 @@ const rule1 = new RRule(
 const rule2 = new RRule(
   {
     freq: RRule.DAILY,
-    dtstart: new Date(Date.UTC(2021, 1, 1, 10, 30)),
+    dtstart: new Date(Date.UTC(2021, 2, 1, 10, 30)),
   },
   true
 );
@@ -25,30 +25,33 @@ const rule3 = new RRuleSet(true);
 rule3.rrule(
   new RRule({
     freq: RRule.WEEKLY,
-    dtstart: new Date(Date.UTC(2021, 1, 1, 17, 30)),
+    dtstart: new Date(Date.UTC(2021, 2, 1, 17, 30)),
     interval: 1,
   })
 );
 
-rule3.exdate(new Date(Date.UTC(2021, 7, 16, 17, 30)));
-rule3.exdate(new Date(Date.UTC(2021, 8, 27, 17, 30)));
-rule3.rdate(new Date(Date.UTC(2021, 7, 5, 10, 30)));
-rule3.rdate(new Date(Date.UTC(2021, 7, 16, 10, 30)));
-rule3.rdate(new Date(Date.UTC(2021, 8, 27, 10, 30)));
+rule3.exdate(new Date(Date.UTC(2021, 8, 16, 17, 30)));
+rule3.exdate(new Date(Date.UTC(2021, 9, 27, 17, 30)));
+rule3.rdate(new Date(Date.UTC(2021, 8, 5, 10, 30)));
+rule3.rdate(new Date(Date.UTC(2021, 8, 16, 10, 30)));
+rule3.rdate(new Date(Date.UTC(2021, 9, 27, 10, 30)));
 
 export function generateEvents() {
   return [
     ...rule1.between(
-      new Date(Date.UTC(2021, 7, 1)),
-      new Date(Date.UTC(2022, 7, 1))
+      new Date(Date.UTC(2021, 8, 1)),
+      new Date(Date.UTC(2021, 8, 7, 23, 59, 59)),
+      true
     ),
     ...rule2.between(
-      new Date(Date.UTC(2021, 7, 1)),
-      new Date(Date.UTC(2022, 7, 1))
+      new Date(Date.UTC(2021, 8, 1)),
+      new Date(Date.UTC(2021, 8, 7, 23, 59, 59)),
+      true
     ),
     ...rule3.between(
-      new Date(Date.UTC(2021, 7, 1)),
-      new Date(Date.UTC(2022, 7, 1))
+      new Date(Date.UTC(2021, 8, 1)),
+      new Date(Date.UTC(2021, 8, 7, 23, 59, 59)),
+      true
     ),
   ];
 }

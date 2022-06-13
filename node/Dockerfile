@@ -6,4 +6,5 @@ COPY ./ .
 
 # Run
 EXPOSE 3000
-CMD node ./main.js
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+
